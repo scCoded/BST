@@ -15,3 +15,7 @@ insertNode key value (Node nextKey nextValue left right)
         | key < nextKey = Node nextKey nextValue (insertNode key value left) right
         | key > nextKey = Node nextKey nextValue left (insertNode key value right)
         | otherwise = Node key value left right
+
+getListOfEntries :: BST valueType -> [(Int, valueType)]
+getListOfEntries Leaf = []
+getListOfEntries (Node key value left right) = (getListOfEntries left) ++ [(key, value)] ++ (getListOfEntries right)
