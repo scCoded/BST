@@ -7,6 +7,7 @@ main = do
     results <- runTestTT tests
     print results
 
+-- insertNode() unit tests
 insertNodeInEmptyTreeTest :: Test
 tree = createEmptyTree
 insertNodeInEmptyTreeTest = TestCase (assertEqual "insert 1st node into new, empty tree"
@@ -77,6 +78,31 @@ createBalancedTreeTest = TestCase (assertEqual "create balanced tree"
     tree28
     )
 
+ -- getListOfEntriesTest() unit tests
+showEmptyTreeTest :: Test
+showEmptyTreeTest = TestCase (assertEqual "check empty tree has no entries"
+    0
+    (length (getListOfEntries tree))
+    )
+
+showEmptyTreeTest2 :: Test
+showEmptyTreeTest2 = TestCase (assertEqual "check empty tree shows has no entries"
+    ([] :: [(Int, String)])
+    (getListOfEntries createEmptyTree)
+    )
+
+showPopulatedTreeTest :: Test
+showPopulatedTreeTest = TestCase (assertEqual "check populated tree has correct number of entries"
+    7
+    (length (getListOfEntries tree28))
+    )
+
+showPopulatedTreeTest2 :: Test
+showPopulatedTreeTest2 = TestCase (assertEqual "check populate tree shows correct entries"
+    [(7,"7"), (8,"8"), (9,"9"), (10,"10"), (11,"11"), (12,"12"), (13,"13")]
+    (getListOfEntries tree28)
+    )
+
 tests :: Test
 tests = TestList [
     insertNodeInEmptyTreeTest,
@@ -85,5 +111,9 @@ tests = TestList [
     insertNodeWithSmallerKeyTest,
     createLeftSkewedTreeTest,
     createRightSkewedTreeTest,
-    createBalancedTreeTest
+    createBalancedTreeTest,
+    showEmptyTreeTest,
+    showEmptyTreeTest2,
+    showPopulatedTreeTest,
+    showPopulatedTreeTest2
     ]
