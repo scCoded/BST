@@ -1,6 +1,9 @@
+import Lib
 import Test.HUnit
 import Test.QuickCheck
 
-main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+--tree1 :: BST
+--tree1 = Leaf
 
+--testTree1 :: Test
+--testTree1 = TestCase (assertEqual "" 0 0)
