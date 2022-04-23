@@ -95,6 +95,19 @@ getReplacedValueTest = TestCase (assertEqual "get replaced value"
     (getValue 1 updatedTree3)
     )
 
+--getInvalidValueTest :: Test
+--getInvalidValueTest = TestCase (assertEqual "get invalid value from populated tree"
+--    ("Key not found")
+--   (evaluate(getValue 100 tree5))
+--   )
+
+ --getInvalidValueTest2:: Test
+--getInvalidValueTest2 = TestCase (assertException "get invalid value from empty tree"
+   -- ("Key not found")
+ --   (getValue 100 tree)
+ --   )
+
+ -- getListOfEntriesTest() unit tests
 showEmptyTreeTest :: Test
 showEmptyTreeTest = TestCase (assertEqual "check empty tree has no entries"
     0
@@ -130,7 +143,6 @@ tests = TestList [
     createBalancedTreeTest,
     getValidValueTest,
     getReplacedValueTest,
-    getInvalidValueTest
     showEmptyTreeTest,
     showEmptyTreeTest2,
     showPopulatedTreeTest,
