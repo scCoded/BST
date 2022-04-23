@@ -1,4 +1,5 @@
 import Test.HUnit
+import Test.HUnit.Tools
 import Test.QuickCheck
 import Lib
 
@@ -78,7 +79,22 @@ createBalancedTreeTest = TestCase (assertEqual "create balanced tree"
     tree28
     )
 
- -- getListOfEntriesTest() unit tests
+
+
+-- getValue() unit tests
+getValidValueTest :: Test
+getValidValueTest = TestCase (assertEqual "get valid value"
+    "value"
+    (getValue 1 tree5)
+    )
+
+getReplacedValueTest :: Test 
+updatedTree3 = insertNode 1 "updated" tree3
+getReplacedValueTest = TestCase (assertEqual "get replaced value"
+    "updated"
+    (getValue 1 updatedTree3)
+    )
+
 showEmptyTreeTest :: Test
 showEmptyTreeTest = TestCase (assertEqual "check empty tree has no entries"
     0
@@ -112,6 +128,9 @@ tests = TestList [
     createLeftSkewedTreeTest,
     createRightSkewedTreeTest,
     createBalancedTreeTest,
+    getValidValueTest,
+    getReplacedValueTest,
+    getInvalidValueTest
     showEmptyTreeTest,
     showEmptyTreeTest2,
     showPopulatedTreeTest,

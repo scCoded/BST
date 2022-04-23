@@ -1,21 +1,17 @@
 module Lib where
-import Data.IntMap (insert)
 
-data BST = Node Int String BST BST
-        | Leaf
-    -- deriving (Eq, Show)
+data BST valueType = Node Int valueType (BST valueType) (BST valueType)
+        | Leaf deriving (Show, Read, Eq)
 
-insertNode:: Int -> String -> BST
-insertNode key value = undefined
+createEmptyTree :: BST valueType
+createEmptyTree = Leaf
 
-lookupByKey:: Int -> BST
-lookupByKey key = undefined
+createNode :: Int -> valueType -> BST valueType
+createNode key value = Node key value Leaf Leaf
 
-showTree:: BST -> IO ()
-showTree = undefined
-
-removeByKey:: Int-> BST
-removeByKey x = undefined
-
-removeByPredicate:: [a] -> (a -> Bool) -> [a]
-removeByPredicate = undefined
+insertNode :: Int -> valueType -> BST valueType -> BST valueType
+insertNode key value Leaf = createNode key value
+insertNode key value (Node nextKey nextValue left right)
+        | key < nextKey = Node nextKey nextValue (insertNode key value left) right
+        | key > nextKey = Node nextKey nextValue left (insertNode key value right)
+        | otherwise = Node key value left right
