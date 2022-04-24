@@ -1,5 +1,4 @@
 import Test.HUnit
-import Test.HUnit.Tools
 import Test.QuickCheck
 import Lib
 
@@ -95,6 +94,18 @@ getReplacedValueTest = TestCase (assertEqual "get replaced value"
     (getValue 1 updatedTree3)
     )
 
+getRootValueTest :: Test
+getRootValueTest = TestCase (assertEqual "get root value"
+    "10"
+    (getValue 10 tree20)
+    )
+
+getChildValueTest :: Test
+getChildValueTest = TestCase (assertEqual "get child value"
+    "13"
+    (getValue 13 tree28)
+    )
+
 --getInvalidValueTest :: Test
 --getInvalidValueTest = TestCase (assertEqual "get invalid value from populated tree"
 --    ("Key not found")
@@ -143,6 +154,8 @@ tests = TestList [
     createBalancedTreeTest,
     getValidValueTest,
     getReplacedValueTest,
+    getRootValueTest,
+    getChildValueTest,
     showEmptyTreeTest,
     showEmptyTreeTest2,
     showPopulatedTreeTest,

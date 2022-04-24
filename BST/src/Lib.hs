@@ -16,6 +16,13 @@ insertNode key value (Node nextKey nextValue left right)
         | key > nextKey = Node nextKey nextValue left (insertNode key value right)
         | otherwise = Node key value left right
 
+getValue :: Int -> BST valueType -> valueType
+getValue _ Leaf = error "Key not found"
+getValue currentKey (Node nextKey value left right)
+        | currentKey == nextKey = value
+        | currentKey < nextKey = getValue currentKey left
+        | otherwise = getValue currentKey right
+
 getListOfEntries :: BST valueType -> [(Int, valueType)]
 getListOfEntries Leaf = []
 getListOfEntries (Node key value left right) = (getListOfEntries left) ++ [(key, value)] ++ (getListOfEntries right)
