@@ -154,6 +154,25 @@ removeNodeInnerParentTest = TestCase (assertEqual "remove inner parent node, min
 -- removeNodeFromEmptyTreeTest :: Test
 -- removeNodeInvalidTest :: Test
 
+-- removeIf() unit tests
+removeIfEvenTest :: Test
+removeIfEvenTest = TestCase (assertEqual "remove even nodes, tree used comprises entirely of even nodes, so should become empty"
+    (Leaf)
+    (removeIf even tree20)
+    )
+
+removeIfOddTest :: Test
+removeIfOddTest = TestCase (assertEqual "remove odd nodes, should leave only even nodes"
+    (Node 10 "10" (Node 8 "8" Leaf Leaf) (Node 12 "12" Leaf Leaf))
+    (removeIf odd tree28)
+    )
+
+removeIfMultipleOf3Test :: Test
+removeIfMultipleOf3Test = TestCase (assertEqual "remove nodes that are multiples of 3"
+    (Node 10 "10" (Node 8 "8" (Node 7 "7" Leaf Leaf) Leaf) (Node 13 "13" (Node 11 "11" Leaf Leaf) Leaf))
+    (removeIf (\x -> x `mod` 3 == 0) tree28)
+    )
+
  -- getListOfEntriesTest() unit tests
 showEmptyTreeTest :: Test
 showEmptyTreeTest = TestCase (assertEqual "check empty tree has no entries"
@@ -196,6 +215,9 @@ tests = TestList [
     removeNodeRootWithChildTest,
     removeNodeChildTest,
     removeNodeInnerParentTest,
+    removeIfEvenTest,
+    removeIfOddTest,
+    removeIfMultipleOf3Test,
     showEmptyTreeTest,
     showEmptyTreeTest2,
     showPopulatedTreeTest,

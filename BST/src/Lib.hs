@@ -43,6 +43,12 @@ detachMinimumNode :: BST valueType -> Int
 detachMinimumNode (Node key _ Leaf _) = key
 detachMinimumNode (Node key _ left _) = detachMinimumNode left
 
+removeIf :: (Int -> Bool) -> BST valueType -> BST valueType
+removeIf _ Leaf = Leaf
+removeIf predicate (Node key value left right)
+        | predicate key = removeNode key (Node key value (removeIf predicate left) (removeIf predicate right))
+        | otherwise = Node key value (removeIf predicate left) (removeIf predicate right)
+
 getListOfEntries :: BST valueType -> [(Int, valueType)]
 getListOfEntries Leaf = []
 getListOfEntries (Node key value left right) = (getListOfEntries left) ++ [(key, value)] ++ (getListOfEntries right)
