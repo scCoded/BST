@@ -23,6 +23,26 @@ getValue currentKey (Node nextKey value left right)
         | currentKey < nextKey = getValue currentKey left
         | otherwise = getValue currentKey right
 
+removeNode :: Int -> BST valueType -> BST valueType
+removeNode _ Leaf = error "Key not found"
+removeNode indexToRemove (Node key value left right)
+        | indexToRemove < key = Node key value (removeNode indexToRemove left) right
+        | indexToRemove > key = Node key value left (removeNode indexToRemove right)
+        | otherwise = removeNode' (Node key value left right)
+
+removeNode' :: BST valueType -> BST valueType
+removeNode' (Node key value Leaf right) = right
+removeNode' (Node key value left Leaf) = left
+removeNode' (Node key value left right) = (Node minNodeKey minValue left newRight)
+                    where
+                        minNodeKey = detachMinimumNode right
+                        minValue = getValue minNodeKey right
+                        newRight = removeNode minNodeKey right
+
+detachMinimumNode :: BST valueType -> Int
+detachMinimumNode (Node key _ Leaf _) = key
+detachMinimumNode (Node key _ left _) = detachMinimumNode left
+
 getListOfEntries :: BST valueType -> [(Int, valueType)]
 getListOfEntries Leaf = []
 getListOfEntries (Node key value left right) = (getListOfEntries left) ++ [(key, value)] ++ (getListOfEntries right)

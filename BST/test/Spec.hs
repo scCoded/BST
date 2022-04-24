@@ -118,6 +118,42 @@ getChildValueTest = TestCase (assertEqual "get child value"
  --   (getValue 100 tree)
  --   )
 
+-- removeNode() unit tests
+removeNodeRootTest :: Test
+removeNodeRootTest = TestCase (assertEqual "remove root node"
+    (Leaf)
+    (removeNode 1 tree3)
+    ) 
+
+removeNodeRootWithChildTest :: Test
+tree29 = createEmptyTree
+tree30 = insertNode 1 "root" tree29
+tree31 = insertNode 2 "child" tree30
+removeNodeRootWithChildTest = TestCase (assertEqual "remove root node, and set child node to root"
+    (Node 2 "child" Leaf Leaf)
+    (removeNode 1 tree31)
+    )
+
+removeNodeChildTest :: Test
+removeNodeChildTest = TestCase (assertEqual "remove child node"
+    (Node 1 "root" Leaf Leaf)
+    (removeNode 2 tree31)
+    )
+
+removeNodeInnerParentTest :: Test
+tree32 = createEmptyTree
+tree33 = insertNode 1 "root" tree32
+tree34 = insertNode 3 "parent" tree33
+tree35 = insertNode 2 "child" tree34
+tree36 = insertNode 4 "child" tree35
+removeNodeInnerParentTest = TestCase (assertEqual "remove inner parent node, minimum key from right subtree becomes new parent"
+    (Node 1 "root" Leaf (Node 4 "child" (Node 2 "child" Leaf Leaf) Leaf))
+    (removeNode 3 tree36)
+    )
+
+-- removeNodeFromEmptyTreeTest :: Test
+-- removeNodeInvalidTest :: Test
+
  -- getListOfEntriesTest() unit tests
 showEmptyTreeTest :: Test
 showEmptyTreeTest = TestCase (assertEqual "check empty tree has no entries"
@@ -156,6 +192,10 @@ tests = TestList [
     getReplacedValueTest,
     getRootValueTest,
     getChildValueTest,
+    removeNodeRootTest,
+    removeNodeRootWithChildTest,
+    removeNodeChildTest,
+    removeNodeInnerParentTest,
     showEmptyTreeTest,
     showEmptyTreeTest2,
     showPopulatedTreeTest,
