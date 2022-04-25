@@ -1,6 +1,13 @@
 import Test.HUnit
 import Test.QuickCheck
-import Lib
+import BST
+    ( createEmptyTree,
+      getListOfEntries,
+      getValue,
+      insertNode,
+      removeIf,
+      removeNode,
+      BST(Leaf, Node) )
 
 main :: IO ()
 main = do
@@ -152,6 +159,12 @@ removeNodeInnerParentTest = TestCase (assertEqual "remove inner parent node, min
     )
 
 -- removeNodeFromEmptyTreeTest :: Test
+-- emptyTree = createEmptyTree
+-- removeNodeFromEmptyTreeTest = TestCase (assertEqual "remove node from empty tree"
+--     (Leaf)
+--     (removeNode 1 emptyTree)
+--     )
+
 -- removeNodeInvalidTest :: Test
 
 -- removeIf() unit tests

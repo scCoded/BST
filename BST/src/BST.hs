@@ -1,4 +1,4 @@
-module Lib where
+module BST where
 
 data BST valueType = Node Int valueType (BST valueType) (BST valueType)
         | Leaf deriving (Show, Read, Eq)
@@ -31,6 +31,7 @@ removeNode indexToRemove (Node key value left right)
         | otherwise = removeNode' (Node key value left right)
 
 removeNode' :: BST valueType -> BST valueType
+removeNode' Leaf = Leaf
 removeNode' (Node key value Leaf right) = right
 removeNode' (Node key value left Leaf) = left
 removeNode' (Node key value left right) = (Node minNodeKey minValue left newRight)
@@ -40,6 +41,7 @@ removeNode' (Node key value left right) = (Node minNodeKey minValue left newRigh
                         newRight = removeNode minNodeKey right
 
 detachMinimumNode :: BST valueType -> Int
+detachMinimumNode Leaf = error "Empty tree"
 detachMinimumNode (Node key _ Leaf _) = key
 detachMinimumNode (Node key _ left _) = detachMinimumNode left
 

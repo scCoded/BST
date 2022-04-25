@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import BST
 
-main :: IO ()
-main = someFunc
+main :: IO ()    -- This says that main is an IO action.
+main = return ()
