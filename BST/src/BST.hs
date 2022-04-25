@@ -34,7 +34,7 @@ removeNode' :: BST valueType -> BST valueType
 removeNode' Leaf = Leaf
 removeNode' (Node key value Leaf right) = right
 removeNode' (Node key value left Leaf) = left
-removeNode' (Node key value left right) = (Node minNodeKey minValue left newRight)
+removeNode' (Node key value left right) = Node minNodeKey minValue left newRight
                     where
                         minNodeKey = detachMinimumNode right
                         minValue = getValue minNodeKey right
@@ -53,4 +53,4 @@ removeIf predicate (Node key value left right)
 
 getListOfEntries :: BST valueType -> [(Int, valueType)]
 getListOfEntries Leaf = []
-getListOfEntries (Node key value left right) = (getListOfEntries left) ++ [(key, value)] ++ (getListOfEntries right)
+getListOfEntries (Node key value left right) = getListOfEntries left ++ [(key, value)] ++ getListOfEntries right

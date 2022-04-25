@@ -38,7 +38,7 @@ executables:
 
 tests:
   BST-test:
-    main:                Spec.hs
+    main:                BST_Test.hs
     source-dirs:         test
     ghc-options:
     - -threaded
