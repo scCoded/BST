@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       BST
+      Dictionary
   other-modules:
       Paths_BST
   hs-source-dirs:
@@ -46,10 +47,11 @@ executable BST-exe
     , base >=4.7 && <5
   default-language: Haskell2010
 
-test-suite BST-test
+test-suite BST_Tests-test
   type: exitcode-stdio-1.0
-  main-is: Spec.hs
+  main-is: BST_Tests.hs
   other-modules:
+      Dictionary_Tests
       Paths_BST
   hs-source-dirs:
       test
