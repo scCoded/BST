@@ -5,13 +5,19 @@ import BST
 import Test.QuickCheck
 import Data.Maybe (isJust, isNothing)
 
-main :: IO ()
-main = do
-    results <- runTestTT tests
-    print results
-    quickCheck prop_insertNode
-    quickCheck prop_canDeleteIf
+-- Create Empty Tree
+createEmptyTreeTest :: Test
+createEmptyTreeTest = TestCase (assertEqual "createEmptyTree" 
+    (Leaf :: BST Int Int)
+    createEmptyTree
+    )
 
+-- Create Node
+createNodeTest :: Test
+createNodeTest = TestCase (assertEqual "create node" 
+    (Node 1 1 Leaf Leaf)
+    (createNode 1 1)
+    )
 
 -- insertNode() unit tests
 insertNodeInEmptyTreeTest :: Test
@@ -202,13 +208,9 @@ prop_reducedTreeAfterRemoval :: Int -> String -> BST Int String -> Bool
 prop_reducedTreeAfterRemoval key value tree = treeSize tree >= treeSize reducedTree
     where reducedTree = removeNode key tree
 
-
-prop_canDeleteIf :: Int -> BST Int String -> Property 
-prop_canDeleteIf key tree = classify (isJust $ BST.getValue key tree) "in tree" $ isNothing $ BST.getValue key $ BST.removeNode key tree
-
-tests :: Test
-tests = TestList [
 tests = [
+        createEmptyTreeTest,
+        createNodeTest,
         insertNodeInEmptyTreeTest,
         insertStringKeyAndValueTest,
         insertIntKeyAndValueTest,

@@ -6,13 +6,10 @@ import BST
 data Dictionary keyType valueType = Dictionary (BST keyType valueType) deriving (Show, Read, Eq)
 
 -- Create new dictionary
-newDictionary :: Dictionary keyType valueType
+newDictionary :: (Ord keyType, Eq keyType) => Dictionary keyType valueType
 newDictionary = Dictionary createEmptyTree
 
 -- Add item to dictionary
--- addToDictionary :: (Ord keyType) => Dictionary keyType valueType -> keyType -> valueType -> Dictionary keyType valueType
--- addToDictionary (Dictionary tree) key value = Dictionary (insertNode key value tree )
-
 addToDict :: (Ord keyType, Eq keyType) => keyType -> valueType -> Dictionary keyType valueType -> Dictionary keyType valueType
 addToDict key value (Dictionary tree) = Dictionary (insertNode key value tree)
 

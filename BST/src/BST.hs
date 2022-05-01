@@ -3,9 +3,7 @@ module BST where
 data BST keyType valueType = Node keyType valueType (BST keyType valueType) (BST keyType valueType)
         | Leaf deriving (Show, Read, Eq)
 
--- data Maybe valueType = Just valueType | Nothing deriving (Show, Read, Eq)
-
-createEmptyTree :: BST keyType valueType
+createEmptyTree :: (Eq keyType, Eq keyType) => (BST keyType valueType)
 createEmptyTree = Leaf
 
 createNode :: (Ord keyType, Eq keyType) => keyType -> valueType -> BST keyType valueType
