@@ -1,15 +1,15 @@
 import Test.HUnit
-import Test.QuickCheck
 import BST
+import Test.QuickCheck
+import Data.Maybe (isJust, isNothing)
 
 main :: IO ()
 main = do
     results <- runTestTT tests
     print results
+    quickCheck prop_insertNode
+    quickCheck prop_canDeleteIf
 
--- Create Empty Tree
--- createEmptyTreeTest :: Test
--- createEmptyTreeTest = TestCase (assertEqual "createEmptyTree" Leaf createEmptyTree)
 
 -- insertNode() unit tests
 insertNodeInEmptyTreeTest :: Test
@@ -168,6 +168,41 @@ getAllEntriesOnEmptyTree = TestCase (assertEqual "get all entries on empty tree"
     )
 
 
+instance (Arbitrary keyType, Arbitrary valueType) => Arbitrary (BST keyType valueType) where 
+    arbitrary = sized bst
+
+bst :: (Arbitrary keyType, Arbitrary valueType) => Int -> Gen (BST keyType valueType)
+bst size
+    | size > 0 = do
+        key <- arbitrary
+        value <- arbitrary
+        let size' = size - 1
+        left <- bst size'
+        right <- bst size'
+        return (Node key value left right)
+    | otherwise = return Leaf
+
+treeSize :: BST key value -> Int
+treeSize Leaf = 0
+treeSize (Node _ _ left right) = 1 + (treeSize left) + (treeSize right)
+
+prop_insertNode :: Int -> String -> BST Int String -> Bool
+prop_insertNode key value tree = getValue key (insertNode key value tree) == Just value
+
+prop_biggerTreeAfterInsert :: Int -> String -> BST Int String -> Bool
+prop_biggerTreeAfterInsert key value tree = treeSize tree < treeSize enlargedTree
+    where enlargedTree = insertNode key value tree
+
+prop_removeNode :: Int -> BST Int String -> Bool
+prop_removeNode key tree = isNothing (getValue key (removeNode key tree))
+
+prop_reducedTreeAfterRemoval :: Int -> String -> BST Int String -> Bool
+prop_reducedTreeAfterRemoval key value tree = treeSize tree >= treeSize reducedTree
+    where reducedTree = removeNode key tree
+
+
+prop_canDeleteIf :: Int -> BST Int String -> Property 
+prop_canDeleteIf key tree = classify (isJust $ BST.getValue key tree) "in tree" $ isNothing $ BST.getValue key $ BST.removeNode key tree
 tests :: Test
 tests = TestList [
         insertNodeInEmptyTreeTest,
