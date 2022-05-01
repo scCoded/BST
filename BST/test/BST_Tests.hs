@@ -27,6 +27,11 @@ insertNodeInEmptyTreeTest = HUnit.assertEqual "insert 1st node into new, empty t
     (Node 1 "value" Leaf Leaf)
     (insertNode 1 "value" createEmptyTree)
 
+insertNewNode :: HUnit.Assertion
+insertNewNode = HUnit.assertEqual "insert new node key"
+    (Node 7 "7" (Node 2 "newValue" Leaf Leaf) (Node 8 "8" Leaf (Node 9 "9" Leaf (Node 10 "10" Leaf Leaf))))
+    (insertNode 2 "newValue" tree)
+
 insertStringKeyAndValueTest :: HUnit.Assertion
 insertStringKeyAndValueTest = HUnit.assertEqual "insert string key/value type"
     (Node "key" "value" Leaf Leaf)
@@ -47,12 +52,6 @@ tree = createTreeFromList [(7,"7"), (8,"8"), (9,"9"), (10,"10")]
 insertNodeWithSameKeyTest = HUnit.assertEqual "insert node with same key to update it's value"
     (Node 7 "updated" Leaf (Node 8 "8" Leaf (Node 9 "9" Leaf (Node 10 "10" Leaf Leaf))))
     (insertNode 7 "updated" tree)
-
-insertNewNode :: HUnit.Assertion
-insertNewNode = HUnit.assertEqual "insert new node key"
-    (Node 7 "7" (Node 2 "newValue" Leaf Leaf) (Node 8 "8" Leaf (Node 9 "9" Leaf (Node 10 "10" Leaf Leaf))))
-    (insertNode 2 "newValue" tree)
-
 
 createLeftSkewedTreeTest :: HUnit.Assertion
 leftSkewedTree = createTreeFromList [(10, "10"), (8, "8"), (4, "4"), (2, "2"), (1, "1")]
@@ -143,15 +142,15 @@ removeIfKeyLessThanTwenty = HUnit.assertEqual "remove if key less than twenty"
     (removeIf (<20) fullTree)
     
 -- getListOfEntries unit tests
-getAllEntriesTest :: HUnit.Assertion
-getAllEntriesTest = HUnit.assertEqual "get all entries"
-    [(1,"1"),(7,"7"),(8,"8"),(9,"9"),(10,"10"),(12,"12"),(14,"14"),(20,"20")]
-    (getListOfEntries fullTree)
-
 getAllEntriesOnEmptyTree :: HUnit.Assertion
 getAllEntriesOnEmptyTree = HUnit.assertEqual "get all entries on empty tree"
     ([] :: [(Int, String)])
     (getListOfEntries Leaf)
+
+getAllEntriesTest :: HUnit.Assertion
+getAllEntriesTest = HUnit.assertEqual "get all entries"
+    [(1,"1"),(7,"7"),(8,"8"),(9,"9"),(10,"10"),(12,"12"),(14,"14"),(20,"20")]
+    (getListOfEntries fullTree)
 
 -- property tests
 instance (Arbitrary keyType, Arbitrary valueType) => Arbitrary (BST keyType valueType) where 
@@ -188,31 +187,31 @@ prop_reducedTreeAfterRemoval key value tree = treeSize tree >= treeSize reducedT
     
 
 tests = testGroup "bst tests" [
-        testCase "" createEmptyTreeTest,
-        testCase "" createNodeTest,
-        testCase "" insertNodeInEmptyTreeTest,
-        testCase "" insertStringKeyAndValueTest,
-        testCase "" insertIntKeyAndValueTest,
-        testCase "" insertDifferentKeyAndValueTest,
-        testCase "" insertNodeWithSameKeyTest,
-        testCase "" insertNewNode,
-        testCase "" createLeftSkewedTreeTest,
-        testCase "" createRightSkewedTreeTest,
-        testCase "" createFullTree,
-        testCase "" insertNodesFromListTest,
-        testCase "" createTreeFromListTest,
-        testCase "" getRootValue,
-        testCase "" getLeftMostValue,
-        testCase "" getRightMostValue,
-        testCase "" getValueThatDoesntExist,
-        testCase "" removeNodeWithLeftChildOnly,
-        testCase "" removeNodeWithRightChildOnly,
-        testCase "" removeNodeWithTwoChildren,
-        testCase "" removeNodeWithNoChildren,
-        testCase "" removeNodeThatDoesntExist,
-        testCase "" removeIfKeyGreaterThanTen,
-        testCase "" removeIfKeyLessThanTwenty,
-        testCase "" getAllEntriesTest,
-        testCase "" getAllEntriesOnEmptyTree,
+        testCase "create empty tree" createEmptyTreeTest,
+        testCase "create node" createNodeTest,
+        testCase "insert node into empty tree" insertNodeInEmptyTreeTest,
+        testCase "insert new node" insertNewNode,
+        testCase "insert string key/value" insertStringKeyAndValueTest,
+        testCase "insert int key/value" insertIntKeyAndValueTest,
+        testCase "insert different key/value" insertDifferentKeyAndValueTest,
+        testCase "overwrite existing node value" insertNodeWithSameKeyTest,
+        testCase "create left skewed tree" createLeftSkewedTreeTest,
+        testCase "create right skewed tree" createRightSkewedTreeTest,
+        testCase "create full tree" createFullTree,
+        testCase "insert nodes from list" insertNodesFromListTest,
+        testCase "create tree from list" createTreeFromListTest,
+        testCase "get root value" getRootValue,
+        testCase "get left most value" getLeftMostValue,
+        testCase "get right most value" getRightMostValue,
+        testCase "get value that doesnt exist" getValueThatDoesntExist,
+        testCase "remove node with left child only" removeNodeWithLeftChildOnly,
+        testCase "remove node with right child only" removeNodeWithRightChildOnly,
+        testCase "remove node with two children" removeNodeWithTwoChildren,
+        testCase "remove node with no children" removeNodeWithNoChildren,
+        testCase "remove node that doesnt exist" removeNodeThatDoesntExist,
+        testCase "remove if key greater than 10" removeIfKeyGreaterThanTen,
+        testCase "remove if key less than 20" removeIfKeyLessThanTwenty,
+        testCase "get all entries on empty tree" getAllEntriesOnEmptyTree,
+        testCase "get all entries" getAllEntriesTest,
         testProperty "prop_insertNode" (prop_insertNode)
     ]

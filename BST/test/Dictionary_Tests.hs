@@ -8,6 +8,11 @@ import Test.Tasty.HUnit
 import Dictionary
 import BST
 
+createEmptyDict :: HUnit.Assertion
+createEmptyDict = HUnit.assertEqual "insert value into empty dictionary"
+    (Dictionary (BST.Leaf :: BST Int Int)) 
+    (newDictionary)
+
 -- insertNode() unit tests
 insertValueIntoEmptyDictionary :: HUnit.Assertion
 insertValueIntoEmptyDictionary = HUnit.assertEqual "insert value into empty dictionary"
@@ -15,5 +20,6 @@ insertValueIntoEmptyDictionary = HUnit.assertEqual "insert value into empty dict
     (addToDict 1 1 newDictionary)
 
 tests = testGroup "dictionary tests" [
-    testCase "test1" insertValueIntoEmptyDictionary
+    testCase "create an empty dictionary" createEmptyDict,
+    testCase "insert a value into an empty dictionary" insertValueIntoEmptyDictionary
     ]
