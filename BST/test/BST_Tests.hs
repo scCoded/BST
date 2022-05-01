@@ -239,8 +239,6 @@ tests = testGroup "bst tests" [
         testCase "get all entries on left skewed tree" getAllEntriesOnLeftSkewedTree,
         testCase "get all entries on right skewed tree" getAllEntriesOnRightSkewedTree,
         testCase "get all entries on single node tree" getAllEntriesOnSingleNodeTree,
-        testProperty "prop_insertNode" (prop_insertNode)
-        testProperty "insert valid" prop_insertNode,
         testProperty "insert valid for key int and value string" prop_insertNodeIntString,
         testProperty "insert valid for key string and value string" prop_insertNodeStringString,
         testProperty "insert valid for key int and value int" prop_insertNodeIntInt,
