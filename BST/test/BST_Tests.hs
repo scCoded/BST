@@ -1,11 +1,8 @@
+module BST_Tests where
+
 import Test.HUnit
 import Test.QuickCheck
 import BST
-
-main :: IO ()
-main = do
-    results <- runTestTT tests
-    print results
 
 -- Create Empty Tree
 -- createEmptyTreeTest :: Test
@@ -167,9 +164,7 @@ getAllEntriesOnEmptyTree = TestCase (assertEqual "get all entries on empty tree"
     (getListOfEntries Leaf)
     )
 
-
-tests :: Test
-tests = TestList [
+tests = [
         insertNodeInEmptyTreeTest,
         insertStringKeyAndValueTest,
         insertIntKeyAndValueTest,
