@@ -170,21 +170,29 @@ treeSize :: BST key value -> Int
 treeSize Leaf = 0
 treeSize (Node _ _ left right) = 1 + (treeSize left) + (treeSize right)
 
-prop_insertNode :: Int -> String -> BST Int String -> Bool
-prop_insertNode key value tree = getValue key (insertNode key value tree) == Just value
+prop_insertNodeIntString :: Int -> String -> BST Int String -> Bool
+prop_insertNodeIntString key value tree = getValue key (insertNode key value tree) == Just value
+
+prop_insertNodeStringString :: String -> String -> BST String String -> Bool
+prop_insertNodeStringString key value tree = getValue key (insertNode key value tree) == Just value
+
+prop_insertNodeIntInt :: Int -> Int -> BST Int Int -> Bool
+prop_insertNodeIntInt key value tree = getValue key (insertNode key value tree) == Just value
+
+prop_insertNodeCharDouble :: Char -> Double -> BST Char Double -> Bool
+prop_insertNodeCharDouble key value tree = getValue key (insertNode key value tree) == Just value
 
 prop_biggerTreeAfterInsert :: Int -> String -> BST Int String -> Bool
 prop_biggerTreeAfterInsert key value tree = treeSize tree <= treeSize enlargedTree
     where enlargedTree = insertNode key value tree
 
-prop_removeNode :: Int -> BST Int String -> Bool
-prop_removeNode key tree = isNothing (getValue key (removeNode key tree))
-
 prop_reducedTreeAfterRemoval :: Int -> String -> BST Int String -> Bool
 prop_reducedTreeAfterRemoval key value tree = treeSize tree >= treeSize reducedTree
     where reducedTree = removeNode key tree
 
-
+prop_reducedTreeAfterRemovalIf :: Int -> String -> BST Int String -> Bool
+prop_reducedTreeAfterRemovalIf key value tree = treeSize tree >= treeSize reducedTree
+    where reducedTree = removeIf (even) tree
 
 tests = testGroup "bst tests" [
         testCase "create empty tree" createEmptyTreeTest,
@@ -213,8 +221,11 @@ tests = testGroup "bst tests" [
         testCase "remove if key less than 20" removeIfKeyLessThanTwenty,
         testCase "get all entries on empty tree" getAllEntriesOnEmptyTree,
         testCase "get all entries" getAllEntriesTest,
-        testProperty "insert valid" prop_insertNode,
+        testProperty "insert valid for key int and value string" prop_insertNodeIntString,
+        testProperty "insert valid for key string and value string" prop_insertNodeStringString,
+        testProperty "insert valid for key int and value int" prop_insertNodeIntInt,
+        testProperty "insert valid for key char and value double" prop_insertNodeCharDouble,
         testProperty "tree bigger after node inserted" prop_biggerTreeAfterInsert,
-        testProperty "remove valid" prop_removeNode,
-        testProperty "tree reduced after node removed" prop_reducedTreeAfterRemoval
+        testProperty "tree reduced after node removed" prop_reducedTreeAfterRemoval,
+        testProperty "remove if bst check" prop_reducedTreeAfterRemovalIf
     ]
