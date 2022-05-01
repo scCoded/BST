@@ -24,7 +24,6 @@ createTreeFromList :: (Ord keyType, Eq keyType) => [(keyType, valueType)] -> BST
 createTreeFromList list = insertNodesFromList list Leaf
 
 getValue :: (Ord keyType, Eq keyType) => keyType -> BST keyType valueType -> Maybe valueType
--- option type
 getValue _ Leaf = Nothing
 getValue currentKey (Node nextKey value left right)
         | currentKey == nextKey = Just value
