@@ -3,12 +3,10 @@ import Dictionary_Tests
 
 import System.Exit
 import Test.HUnit
+import Test.Tasty
+
+tests :: TestTree
+tests = testGroup "Tests" [BST_Tests.tests, Dictionary_Tests.tests]
 
 main :: IO ()
-main = do
-    results <- runTestTT $
-                    test (BST_Tests.tests ++ Dictionary_Tests.tests)
-    if errors results + failures results == 0 then
-        putStrLn "Tests passed."
-    else
-        die "Tests failed."
+main = defaultMain Main.tests

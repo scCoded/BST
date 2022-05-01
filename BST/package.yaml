@@ -44,3 +44,6 @@ tests:
     - BST
     - HUnit
     - QuickCheck
+    - tasty
+    - tasty-quickcheck
+    - tasty-hunit
