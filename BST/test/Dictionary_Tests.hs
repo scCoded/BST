@@ -10,7 +10,7 @@ import BST
 
 -- newDictionary tests
 createEmptyDict :: HUnit.Assertion
-createEmptyDict = HUnit.assertEqual "insert value into empty dictionary"
+createEmptyDict = HUnit.assertEqual "create dictionary"
     (Dictionary (BST.Leaf :: BST Int Int)) 
     (newDictionary)
 
@@ -149,6 +149,17 @@ getAllEntriesOnSingleValueDict = HUnit.assertEqual "get all entries on single va
     [(10, "10")]
     (getAllEntries (createDictionaryFromList [(10, "10")]))
 
+-- property tests
+instance (Arbitrary keyType, Arbitrary valueType) => Arbitrary (Dictionary keyType valueType) where
+    arbitrary = dictionaryGen
+
+dictionaryGen :: (Arbitrary keyType, Arbitrary valueType) => Gen (Dictionary keyType valueType)
+dictionaryGen = return (Dictionary (BST.Leaf :: BST keyType valueType))
+
+prop_addToDict :: Dictionary Int String -> Int -> String -> Bool
+prop_addToDict dict key value = (getValueFromDict key (addToDict key value dict)) == Just value
+
+
 tests = testGroup "dictionary tests" [
     testCase "create an empty dictionary" createEmptyDict,
     testCase "insert a value into an empty dictionary" insertValueIntoEmptyDictionary,
@@ -175,5 +186,6 @@ tests = testGroup "dictionary tests" [
     testCase "get all entries" getAllEntriesTest,
     testCase "get all entries on right skewed dict" getAllEntriesOnRightSkewedDict,
     testCase "get all entries on left skewed dict" getAllEntriesOnLeftSkewedDict,
-    testCase "get all entries on single value dict" getAllEntriesOnSingleValueDict
+    testCase "get all entries on single value dict" getAllEntriesOnSingleValueDict,
+    testProperty "insert into dictionary" prop_addToDict
     ]
