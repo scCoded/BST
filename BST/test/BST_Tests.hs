@@ -27,6 +27,29 @@ insertNodeInEmptyTreeTest = HUnit.assertEqual "insert 1st node into new, empty t
     (Node 1 "value" Leaf Leaf)
     (insertNode 1 "value" createEmptyTree)
 
+insertRootNodeTest :: HUnit.Assertion
+insertRootNodeTest = HUnit.assertEqual "insert node" 
+    (Node 1 1 Leaf Leaf)
+    (insertNode 1 1 createEmptyTree)
+
+insertNodeToRightOfRootTest :: HUnit.Assertion
+rootTree = insertNode 1 1 createEmptyTree
+insertNodeToRightOfRootTest = HUnit.assertEqual "insert new node key"
+    (Node 1 1 Leaf (Node 2 2 Leaf Leaf))
+    (insertNode 2 2 rootTree)
+
+insertNodeToLeftOfRootTest :: HUnit.Assertion
+rootTree2 = insertNode 5 5 createEmptyTree
+insertNodeToLeftOfRootTest = HUnit.assertEqual "insert new node key"
+    (Node 5 5 (Node 2 2 Leaf Leaf) Leaf)
+    (insertNode 2 2 rootTree2)
+
+overwriteRootNode :: HUnit.Assertion
+rootTree3 = insertNode 5 5 createEmptyTree
+overwriteRootNode = HUnit.assertEqual "insert new node key"
+    (Node 5 6 Leaf Leaf)
+    (insertNode 5 6 rootTree3)
+
 insertNewNode :: HUnit.Assertion
 tree = createTreeFromList [(7,"7"), (8,"8"), (9,"9"), (10,"10")]
 insertNewNode = HUnit.assertEqual "insert new node key"
@@ -212,6 +235,10 @@ prop_reducedTreeAfterRemovalIf key value tree = treeSize tree >= treeSize reduce
 tests = testGroup "bst tests" [
         testCase "create empty tree" createEmptyTreeTest,
         testCase "create node" createNodeTest,
+        testCase "insert root node" insertRootNodeTest,
+        testCase "insert node to left of root" insertNodeToLeftOfRootTest,
+        testCase "insert node to right of root" insertNodeToRightOfRootTest,
+        testCase "overwrite root node" overwriteRootNode,
         testCase "insert node into empty tree" insertNodeInEmptyTreeTest,
         testCase "insert new node" insertNewNode,
         testCase "insert string key/value" insertStringKeyAndValueTest,
