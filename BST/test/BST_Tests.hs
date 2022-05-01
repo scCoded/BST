@@ -21,13 +21,14 @@ createNodeTest = HUnit.assertEqual "create node"
     (Node 1 1 Leaf Leaf)
     (createNode 1 1)
 
--- insertNode() unit tests
+-- insertNode tests
 insertNodeInEmptyTreeTest :: HUnit.Assertion
 insertNodeInEmptyTreeTest = HUnit.assertEqual "insert 1st node into new, empty tree"
     (Node 1 "value" Leaf Leaf)
     (insertNode 1 "value" createEmptyTree)
 
 insertNewNode :: HUnit.Assertion
+tree = createTreeFromList [(7,"7"), (8,"8"), (9,"9"), (10,"10")]
 insertNewNode = HUnit.assertEqual "insert new node key"
     (Node 7 "7" (Node 2 "newValue" Leaf Leaf) (Node 8 "8" Leaf (Node 9 "9" Leaf (Node 10 "10" Leaf Leaf))))
     (insertNode 2 "newValue" tree)
@@ -48,7 +49,6 @@ insertDifferentKeyAndValueTest = HUnit.assertEqual "insert different key/value t
     (insertNode 1 "value" createEmptyTree)
 
 insertNodeWithSameKeyTest :: HUnit.Assertion
-tree = createTreeFromList [(7,"7"), (8,"8"), (9,"9"), (10,"10")]
 insertNodeWithSameKeyTest = HUnit.assertEqual "insert node with same key to update it's value"
     (Node 7 "updated" Leaf (Node 8 "8" Leaf (Node 9 "9" Leaf (Node 10 "10" Leaf Leaf))))
     (insertNode 7 "updated" tree)
@@ -71,7 +71,7 @@ createFullTree = HUnit.assertEqual "create full tree"
     (Node 10 "10" (Node 8 "8" (Node 7 "7" (Node 1 "1" Leaf Leaf) Leaf) (Node 9 "9" Leaf Leaf)) (Node 12 "12" Leaf (Node 14 "14" Leaf (Node 20 "20" Leaf Leaf))))
     fullTree
 
--- insertNodesFromList unit tests
+-- insertNodesFromList tests
 insertNodesFromListTest :: HUnit.Assertion
 insertNodesFromListTest = HUnit.assertEqual "insert nodes from list"
     (Node 7 "7" Leaf (Node 8 "8" Leaf (Node 9 "9" Leaf (Node 10 "10" Leaf (Node 11 "11" Leaf (Node 12 "12" Leaf (Node 13 "13" Leaf Leaf)))))))
@@ -104,7 +104,7 @@ getValueThatDoesntExist = HUnit.assertEqual "get value that doesn't exist"
     (Nothing)
     (getValue 100 fullTree)
 
--- removeNode unit tests
+-- removeNode tests
 removeNodeWithLeftChildOnly :: HUnit.Assertion
 removeNodeWithLeftChildOnly = HUnit.assertEqual "remove node with left child only"
     (Node 10 "10" (Node 8 "8" (Node 1 "1" Leaf Leaf) (Node 9 "9" Leaf Leaf)) (Node 12 "12" Leaf (Node 14 "14" Leaf (Node 20 "20" Leaf Leaf))))
@@ -130,7 +130,7 @@ removeNodeThatDoesntExist = HUnit.assertEqual "remove node that doesn't exist"
     (fullTree)
     (removeNode 100 fullTree)
 
--- removeIf unit tests
+-- removeIf tests
 removeIfKeyGreaterThanTen :: HUnit.Assertion
 removeIfKeyGreaterThanTen = HUnit.assertEqual "remove if key greater than ten"
     (Node 10 "10" (Node 8 "8" (Node 7 "7" (Node 1 "1" Leaf Leaf) Leaf) (Node 9 "9" Leaf Leaf)) Leaf)
@@ -141,7 +141,7 @@ removeIfKeyLessThanTwenty = HUnit.assertEqual "remove if key less than twenty"
     (Node 20 "20" Leaf Leaf)
     (removeIf (<20) fullTree)
     
--- getListOfEntries unit tests
+-- getListOfEntries tests
 getAllEntriesOnEmptyTree :: HUnit.Assertion
 getAllEntriesOnEmptyTree = HUnit.assertEqual "get all entries on empty tree"
     ([] :: [(Int, String)])
@@ -151,6 +151,21 @@ getAllEntriesTest :: HUnit.Assertion
 getAllEntriesTest = HUnit.assertEqual "get all entries"
     [(1,"1"),(7,"7"),(8,"8"),(9,"9"),(10,"10"),(12,"12"),(14,"14"),(20,"20")]
     (getListOfEntries fullTree)
+
+getAllEntriesOnLeftSkewedTree :: HUnit.Assertion
+getAllEntriesOnLeftSkewedTree = HUnit.assertEqual "get all entries on left skewed tree"
+    [(1,"1"),(2,"2"),(4,"4"),(8,"8"),(10,"10")]
+    (getListOfEntries leftSkewedTree)
+
+getAllEntriesOnRightSkewedTree :: HUnit.Assertion
+getAllEntriesOnRightSkewedTree = HUnit.assertEqual "get all entries on right skewed tree"
+    [(10,"10"),(12,"12"),(14,"14"),(16,"16"),(18,"18"),(20,"20")]
+    (getListOfEntries rightSkewedTree)
+
+getAllEntriesOnSingleNodeTree :: HUnit.Assertion
+getAllEntriesOnSingleNodeTree = HUnit.assertEqual "get all entries on single node tree"
+    [(1,"1")]
+    (getListOfEntries (createTreeFromList [(1,"1")]))
 
 -- property tests
 instance (Arbitrary keyType, Arbitrary valueType) => Arbitrary (BST keyType valueType) where 
@@ -221,6 +236,11 @@ tests = testGroup "bst tests" [
         testCase "remove if key less than 20" removeIfKeyLessThanTwenty,
         testCase "get all entries on empty tree" getAllEntriesOnEmptyTree,
         testCase "get all entries" getAllEntriesTest,
+        testCase "get all entries on left skewed tree" getAllEntriesOnLeftSkewedTree,
+        testCase "get all entries on right skewed tree" getAllEntriesOnRightSkewedTree,
+        testCase "get all entries on single node tree" getAllEntriesOnSingleNodeTree,
+        testProperty "prop_insertNode" (prop_insertNode)
+        testProperty "insert valid" prop_insertNode,
         testProperty "insert valid for key int and value string" prop_insertNodeIntString,
         testProperty "insert valid for key string and value string" prop_insertNodeStringString,
         testProperty "insert valid for key int and value int" prop_insertNodeIntInt,
