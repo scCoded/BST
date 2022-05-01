@@ -47,15 +47,15 @@ executable BST-exe
     , base >=4.7 && <5
   default-language: Haskell2010
 
-test-suite BST_Tests-test
+test-suite example-test
   type: exitcode-stdio-1.0
-  main-is: BST_Tests.hs
+  main-is: Spec.hs
   other-modules:
+      BST_Tests
       Dictionary_Tests
       Paths_BST
   hs-source-dirs:
       test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       BST
     , HUnit

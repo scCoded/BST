@@ -1,3 +1,5 @@
+module BST_Tests where
+
 import Test.HUnit
 import BST
 import Test.QuickCheck
@@ -203,8 +205,10 @@ prop_reducedTreeAfterRemoval key value tree = treeSize tree >= treeSize reducedT
 
 prop_canDeleteIf :: Int -> BST Int String -> Property 
 prop_canDeleteIf key tree = classify (isJust $ BST.getValue key tree) "in tree" $ isNothing $ BST.getValue key $ BST.removeNode key tree
+
 tests :: Test
 tests = TestList [
+tests = [
         insertNodeInEmptyTreeTest,
         insertStringKeyAndValueTest,
         insertIntKeyAndValueTest,
