@@ -161,9 +161,8 @@ bst size
     | size > 0 = do
         key <- arbitrary
         value <- arbitrary
-        let size' = size - 1
-        left <- bst size'
-        right <- bst size'
+        left <- bst (size `div` 2)
+        right <- bst (size `div` 2)
         return (Node key value left right)
     | otherwise = return Leaf
 
@@ -175,7 +174,7 @@ prop_insertNode :: Int -> String -> BST Int String -> Bool
 prop_insertNode key value tree = getValue key (insertNode key value tree) == Just value
 
 prop_biggerTreeAfterInsert :: Int -> String -> BST Int String -> Bool
-prop_biggerTreeAfterInsert key value tree = treeSize tree < treeSize enlargedTree
+prop_biggerTreeAfterInsert key value tree = treeSize tree <= treeSize enlargedTree
     where enlargedTree = insertNode key value tree
 
 prop_removeNode :: Int -> BST Int String -> Bool
@@ -184,7 +183,8 @@ prop_removeNode key tree = isNothing (getValue key (removeNode key tree))
 prop_reducedTreeAfterRemoval :: Int -> String -> BST Int String -> Bool
 prop_reducedTreeAfterRemoval key value tree = treeSize tree >= treeSize reducedTree
     where reducedTree = removeNode key tree
-    
+
+
 
 tests = testGroup "bst tests" [
         testCase "create empty tree" createEmptyTreeTest,
@@ -213,5 +213,8 @@ tests = testGroup "bst tests" [
         testCase "remove if key less than 20" removeIfKeyLessThanTwenty,
         testCase "get all entries on empty tree" getAllEntriesOnEmptyTree,
         testCase "get all entries" getAllEntriesTest,
-        testProperty "prop_insertNode" (prop_insertNode)
+        testProperty "insert valid" prop_insertNode,
+        testProperty "tree bigger after node inserted" prop_biggerTreeAfterInsert,
+        testProperty "remove valid" prop_removeNode,
+        testProperty "tree reduced after node removed" prop_reducedTreeAfterRemoval
     ]
