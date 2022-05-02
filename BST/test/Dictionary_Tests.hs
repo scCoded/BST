@@ -156,9 +156,17 @@ instance (Arbitrary keyType, Arbitrary valueType) => Arbitrary (Dictionary keyTy
 dictionaryGen :: (Arbitrary keyType, Arbitrary valueType) => Gen (Dictionary keyType valueType)
 dictionaryGen = return (Dictionary (BST.Leaf :: BST keyType valueType))
 
-prop_addToDict :: Dictionary Int String -> Int -> String -> Bool
-prop_addToDict dict key value = (getValueFromDict key (addToDict key value dict)) == Just value
+prop_addToDictIntString :: Dictionary Int String -> Int -> String -> Bool
+prop_addToDictIntString dict key value = (getValueFromDict key (addToDict key value dict)) == Just value
 
+prop_addToDictStringString :: Dictionary String String -> String -> String -> Bool
+prop_addToDictStringString dict key value = (getValueFromDict key (addToDict key value dict)) == Just value
+
+prop_addToDictIntInt :: Dictionary Int Int -> Int -> Int -> Bool
+prop_addToDictIntInt dict key value = (getValueFromDict key (addToDict key value dict)) == Just value
+
+prop_addToDictCharDouble :: Dictionary Char Double -> Char -> Double -> Bool
+prop_addToDictCharDouble dict key value = (getValueFromDict key (addToDict key value dict)) == Just value
 
 tests = testGroup "dictionary tests" [
     testCase "create an empty dictionary" createEmptyDict,
@@ -187,5 +195,8 @@ tests = testGroup "dictionary tests" [
     testCase "get all entries on right skewed dict" getAllEntriesOnRightSkewedDict,
     testCase "get all entries on left skewed dict" getAllEntriesOnLeftSkewedDict,
     testCase "get all entries on single value dict" getAllEntriesOnSingleValueDict,
-    testProperty "insert into dictionary" prop_addToDict
+    testProperty "insert into dictionary int string" prop_addToDictIntString,
+    testProperty "insert into dictionary string string" prop_addToDictStringString,
+    testProperty "insert into dictionary int int" prop_addToDictIntInt,
+    testProperty "insert into dictionary char double" prop_addToDictCharDouble
     ]
